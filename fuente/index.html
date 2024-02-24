@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="../fuente/estilos/home.css" type="text/css">
     <link rel="stylesheet" href="../fuente/estilos/header.css" type="text/css">
+
+    <script src="../fuente/scripts/home.js" defer></script>
 </head>
 <body>
     <header>
@@ -15,17 +18,27 @@
                 <li><a href="#">Electronica</a></li>
                 <li><a href="#">Ropa de Mujer</a></li>
                 <li><a href="#">Ropa de Hombre</a> </li>
-                <li><a href="#">Mapa</a></li>
+                <li><a href="#">Contactanos</a></li>
                 <li><a href="../fuente/html/login.html">Login/Registro</a></li>
                 <li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <section>
-            <h1>Home</h1>
-            <p>Home page content</p>
-        </section>
+        <h1 id="titulo">Todos los productos</h1>
+        <div id="flexContainer">
+            <div id="buttonContainer">
+                <p>Vistas</p>
+                <button id="listViewBtn"><i class="fas fa-list"></i></button>
+                <button id="tableViewBtn"><i class="fas fa-table"></i></button>
+                <p>Filtro Categorias</p>
+                <button id="sortAscBtn"><i class="fas fa-sort-alpha-down"></i> </button>
+                <button id="sortDescBtn"><i class="fas fa-sort-alpha-up"></i> </button>
+            </div>
+            <section id="contenido">
+
+            </section>
+        </div>
     </main>
 </body>
 </html>
