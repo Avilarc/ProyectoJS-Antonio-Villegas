@@ -32,3 +32,21 @@ nav a:hover {
 .fas {
     color: #ff0;
 }
+
+#loginUser {
+    display: flex;
+    flex-direction: column;
+}
+#logoutButton {
+    display: none;
+    top: 100%;
+    left: 0;
+    background-color: #f9f9f9;
+    padding: 10px;
+    z-index: 1;
+}
+
+#loginUser:hover #logoutButton {
+    display: block;
+    color: black;
+}

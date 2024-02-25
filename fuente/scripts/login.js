@@ -26,6 +26,7 @@ function validarCampo(campo) {
 
 function almacenarUsuario(usuario) {
     try {
+        usuario.carrito = [];
         let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
         usuarios.push(usuario);
         localStorage.setItem("usuarios", JSON.stringify(usuarios));
@@ -39,7 +40,14 @@ async function iniciarSesion(username, password) {
         let usuarios = await obtenerUsuariosDefault();
         let usuariosLocales = JSON.parse(localStorage.getItem("usuarios")) || [];
         let allusers = [...usuarios, ...usuariosLocales];
-        return allusers.some(usuario => usuario.username === username && usuario.password === password);
+        let usuario =  allusers.find(usuario => usuario.username === username && usuario.password === password);
+        if(usuario) {
+            let carritoGuardado = JSON.parse(localStorage.getItem(usuario.username)) || [];
+            usuario.carrito = carritoGuardado;
+            localStorage.setItem('usuarioLogeado', JSON.stringify(usuario));
+            }
+
+        return usuario ||null;
     } catch (error) {
         console.error('Error iniciando sesión:', error);
     }
@@ -74,10 +82,14 @@ document.getElementById("login").addEventListener("submit", async (evento) => {
         let username = document.getElementById("username");
         let password = document.getElementById("password");
         if(validarCampo(username) && validarCampo(password)) {
-            if (await iniciarSesion(username.value, password.value)) {
-                alert("Bienvenido");
+            let usuario  = await iniciarSesion(username.value, password.value);
+            if(usuario) {
+                localStorage.setItem('usuarioLogeado', JSON.stringify(usuario));
+                actualizarHeader();
+                window.location.href = "../index.html";
             } else {
                 alert("Usuario o contraseña incorrectos");
+
             }
         }
     } catch (error) {

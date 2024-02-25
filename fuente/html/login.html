@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
+    <script src="../scripts/ui.js" defer></script>
     <script src="../scripts/login.js" defer></script>
     <link rel="stylesheet" href="../estilos/header.css" type="text/css">
     <link rel="stylesheet" href="../estilos/login.css" type="text/css">
@@ -19,7 +19,13 @@
                 <li><a href="#">Ropa de Mujer</a></li>
                 <li><a href="#">Ropa de Hombre</a> </li>
                 <li><a href="#">Contactanos</a></li>
-                <li><a href="../html/login.html">Login/Registro</a></li>
+                <li id="loginDefault">
+                    <a href="../html/login.html">Login/Registro</a>
+                </li>
+                <li id="loginUser" style="display: none;">
+                    <a id="nombreUsuario"></a>
+                    <a id="logoutButton">Logout</a>
+                </li>
                 <li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
             </ul>
         </nav>

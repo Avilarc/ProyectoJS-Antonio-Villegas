@@ -106,3 +106,125 @@ img {
     height: auto;
     margin-right: 10px;
 }
+
+.product-page {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-details h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.product-details img {
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.product-details p {
+    margin-bottom: 10px;
+}
+
+.product-details button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.product-details button:hover {
+    background-color: white;
+    color: #4CAF50;
+}
+
+.addToCartButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.addToCartButton:hover {
+    background-color: white;
+    color: #4CAF50;
+}
+
+.product-card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.animate {
+    animation: shake 0.5s;
+    animation-iteration-count: 2;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+button:hover {
+    background-color: white;
+    color: #008CBA;
+    border: 2px solid #008CBA;
+}
+
+button i.liked {
+    color: green;
+}
+
+button i.disliked {
+    color: red;
+}
+
+button i.favorited {
+    color: gold;
+}

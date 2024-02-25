@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="../fuente/estilos/home.css" type="text/css">
     <link rel="stylesheet" href="../fuente/estilos/header.css" type="text/css">
-
+    <script src="../fuente/scripts/ui.js" defer></script>
     <script src="../fuente/scripts/home.js" defer></script>
 </head>
 <body>
@@ -19,8 +19,14 @@
                 <li><a href="#">Ropa de Mujer</a></li>
                 <li><a href="#">Ropa de Hombre</a> </li>
                 <li><a href="#">Contactanos</a></li>
-                <li><a href="../fuente/html/login.html">Login/Registro</a></li>
-                <li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+                <li id="loginDefault">
+                    <a href="../fuente/html/login.html">Login/Registro</a>
+                </li>
+                <li id="loginUser" style="display: none;">
+                    <a id="nombreUsuario"></a>
+                    <a id="logoutButton">Logout</a>
+                </li>
+                <li class="carrito"><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
             </ul>
         </nav>
     </header>
