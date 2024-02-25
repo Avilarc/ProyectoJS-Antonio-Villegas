@@ -10,10 +10,23 @@ let page = 1;
 let productosCargados = false;
 let visionActual = 'table';
 let carrito = [];
-let usuarioLogeado = JSON.parse(localStorage.getItem("usuarioLogeado")) || null;
+let usuarioLogeado = JSON.parse(localStorage.getItem("usuarioLogeado"));
 
-if (usuarioLogeado && !usuarioLogeado.carrito) {
-    usuarioLogeado.carrito = [];
+if (usuarioLogeado) {
+    if (!usuarioLogeado.carrito) {
+        usuarioLogeado.carrito = [];
+    }
+    if (!usuarioLogeado.favoritos) {
+        usuarioLogeado.favoritos = [];
+    } else {
+        favoritos = usuarioLogeado.favoritos;
+    }
+} else {
+    usuarioLogeado = {
+        carrito: [],
+        favoritos: []
+    };
+    favoritos = [];
 }
 
 
@@ -170,7 +183,11 @@ function toggleFavorite(productId) {
         favoritos.splice(index, 1);
         document.querySelector(`#favoriteButton_${productId} i`).classList.remove('favorited');
     }
-    localStorage.setItem('favoritos', JSON.stringify(favoritos));
+    usuarioLogeado.favoritos = favoritos;
+    localStorage.setItem('usuarioLogeado', JSON.stringify(usuarioLogeado));
+    if (usuarioLogeado) {
+        localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
+    }
 }
 
 
@@ -197,7 +214,8 @@ document.getElementById('sortDescBtn').addEventListener('click', function() {
 document.getElementById('logoutButton').addEventListener('click', function(event) {
     event.preventDefault();
     if (usuarioLogeado) {
-        localStorage.setItem(usuarioLogeado.username, JSON.stringify(usuarioLogeado.carrito)); // Modificado aquí
+        localStorage.setItem(usuarioLogeado.username + '_carrito', JSON.stringify(usuarioLogeado.carrito));
+        localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
     }
     localStorage.removeItem('usuarioLogeado');
     actualizarHeader();
