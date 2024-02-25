@@ -1,0 +1,41 @@
+#contenedorCarrito {
+    width: 100%;
+    margin: auto;
+}
+
+#contenedorCarrito table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#contenedorCarrito th, #contenedorCarrito td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#contenedorCarrito th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#contenedorCarrito tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#contenedorCarrito button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+#contenedorCarrito button:hover {
+    background-color: #45a049;
+}

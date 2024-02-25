@@ -2,16 +2,15 @@
 let apiURL = 'https://fakestoreapi.com/products';
 let productos = [];
 let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
-productos.forEach(producto => {
-    producto.likes = 0;
-    producto.dislikes = 0;
-});
+//cantiudad de likes y dislikes que se guardan en el local storage de cada producto
+
 let page = 1;
 let productosCargados = false;
 let visionActual = 'table';
 let carrito = [];
 let usuarioLogeado = JSON.parse(localStorage.getItem("usuarioLogeado"));
-
+//condicionales de usuario logeado para carrito y favoritos
+//aquí se verifica si el usuario logeado tiene carrito y favoritos, si no los tiene se crean
 if (usuarioLogeado) {
     if (!usuarioLogeado.carrito) {
         usuarioLogeado.carrito = [];
@@ -47,6 +46,8 @@ function fetchProducts(page) {
                 producto.dislikes = localStorage.getItem(`dislikes_${producto.id}`) || 0;
                 producto.isFavorite = favoritos.includes(producto.id);
             });
+            // Almacenar los productos en localStorage después de que se hayan cargado y procesado
+            localStorage.setItem('productos', JSON.stringify(productos));
             updateView();
         })
         .catch(error => console.error('Error:', error));
@@ -65,8 +66,8 @@ function generateList(productos) {
         <li class="product-card" onclick="showProductDetails(${product.id})">
             <img src="${product.image}" alt="${product.title}";">
             ${product.title} - ${product.price}
-            <p>Me gusta: ${product.likes} <button id="likeButton_${product.id}" onclick="event.stopPropagation(); likeProduct(${product.id})"><i class="fa fa-thumbs-up"></i></button></p>
-            <p>No me gusta: ${product.dislikes} <button id="dislikeButton_${product.id}" onclick="event.stopPropagation(); dislikeProduct(${product.id})"><i class="fa fa-thumbs-down"></i></button></p>
+            <button id="likeButton_${product.id}" onclick="event.stopPropagation(); likeProduct(${product.id})"><i class="fa fa-thumbs-up"></i> ${product.likes}</button>
+            <button id="dislikeButton_${product.id}" onclick="event.stopPropagation(); dislikeProduct(${product.id})"><i class="fa fa-thumbs-down"></i> ${product.dislikes}</button>
             <button class="addToCartButton" onclick="event.stopPropagation(); addToCart(${product.id})">Agregar al carrito</button>
             <button id="favoriteButton_${product.id}" onclick="event.stopPropagation(); toggleFavorite(${product.id})"><i class="fa fa-heart"></i></button>
         </li>
@@ -92,8 +93,8 @@ function generateTable(productos) {
                         <td><img src="${producto.image}" alt="${producto.title}";"></td>
                         <td>${producto.title}</td>
                         <td>${producto.price}</td>
-                        <td>${producto.likes} <button id="likeButton_${producto.id}" onclick="event.stopPropagation(); likeProduct(${producto.id})"><i class="fa fa-thumbs-up"></i></button></td>
-                        <td>${producto.dislikes} <button id="dislikeButton_${producto.id}" onclick="event.stopPropagation(); dislikeProduct(${producto.id})"><i class="fa fa-thumbs-down"></i></button></td>
+                        <td><button id="likeButton_${producto.id}" onclick="event.stopPropagation(); likeProduct(${producto.id})"><i class="fa fa-thumbs-up"></i> ${producto.likes}</button></td>
+                        <td><button id="dislikeButton_${producto.id}" onclick="event.stopPropagation(); dislikeProduct(${producto.id})"><i class="fa fa-thumbs-down"></i> ${producto.dislikes}</button></td>
                         <td><button class="addToCartButton" onclick="event.stopPropagation(); addToCart(${producto.id})">Agregar al carrito</button>
                         <button id="favoriteButton_${producto.id}" onclick="event.stopPropagation(); toggleFavorite(${producto.id})"><i class="fa fa-heart"></i></button></td>
                     </tr>
@@ -141,18 +142,19 @@ function addToCart(productId) {
     const producto = productos.find(product => product.id === productId);
     if(producto) {
         if(usuarioLogeado) {
-            usuarioLogeado.carrito.push(producto);
-            localStorage.setItem(usuarioLogeado.username, JSON.stringify(usuarioLogeado.carrito));
+            let carrito = JSON.parse(localStorage.getItem(usuarioLogeado.username)) || [];
+            carrito.push(producto);
+            localStorage.setItem(usuarioLogeado.username, JSON.stringify(carrito));
             console.log('Producto agregado al carrito', producto);
         } else {
             carrito.push(producto);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
             console.log('Producto agregado al carrito', producto);
         }
         document.querySelector('.carrito').classList.add('animate');
         setTimeout(() => {
             document.querySelector('.carrito').classList.remove('animate');
         },1000);
-
     }
 }
 
@@ -161,7 +163,9 @@ function likeProduct(productId) {
     if (producto) {
         producto.likes++;
         localStorage.setItem(`likes_${producto.id}`, producto.likes);
-        document.querySelector(`#likeButton_${productId} i`).classList.add('liked');
+        const likeButton = document.querySelector(`#likeButton_${productId}`);
+        likeButton.classList.add('liked');
+        likeButton.innerHTML = `<i class="fa fa-thumbs-up"></i>${producto.likes}`;
     }
 }
 
@@ -170,7 +174,9 @@ function dislikeProduct(productId) {
     if (producto) {
         producto.dislikes++;
         localStorage.setItem(`dislikes_${producto.id}`, producto.dislikes);
-        document.querySelector(`#dislikeButton_${productId} i`).classList.add('disliked');
+        const dislikeButton = document.querySelector(`#dislikeButton_${productId}`);
+        dislikeButton.classList.add('disliked');
+        dislikeButton.innerHTML = `<i class="fa fa-thumbs-down"></i>${producto.dislikes}`;
     }
 }
 
