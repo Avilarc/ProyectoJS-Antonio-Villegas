@@ -40,15 +40,19 @@ function fetchProducts(page) {
             return response.json();
         })
         .then(data => {
-            productos = productos.concat(data);
-            productos.forEach(producto => {
-                producto.likes = localStorage.getItem(`likes_${producto.id}`) || 0;
-                producto.dislikes = localStorage.getItem(`dislikes_${producto.id}`) || 0;
-                producto.isFavorite = favoritos.includes(producto.id);
-            });
-            // Almacenar los productos en localStorage después de que se hayan cargado y procesado
-            localStorage.setItem('productos', JSON.stringify(productos));
-            updateView();
+            if (data.length === 0) {
+                productosCargados = true;
+            } else {
+                productos = productos.concat(data);
+                productos.forEach(producto => {
+                    producto.likes = localStorage.getItem(`likes_${producto.id}`) || 0;
+                    producto.dislikes = localStorage.getItem(`dislikes_${producto.id}`) || 0;
+                    producto.isFavorite = favoritos.includes(producto.id);
+                });
+                // Almacenar los productos en localStorage después de que se hayan cargado y procesado
+                localStorage.setItem('productos', JSON.stringify(productos));
+                updateView();
+            }
         })
         .catch(error => console.error('Error:', error));
 }
@@ -252,7 +256,7 @@ window.addEventListener('scroll', function() {
     }
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         // hemos llegado al final de la página
-        if (!productosCargados) {
+        if (!productosCargados) { // Solo hacer fetch si aún hay productos para cargar
             page++;
             fetchProducts(page);
         }
