@@ -2,10 +2,10 @@
   "name": "jsfinal",
   "version": "1.0.0",
   "description": "",
-  "browsers":"> 0.5%, last 4 versions, not dead",
+  "browsers": "> 0.5%, last 4 versions, not dead",
   "scripts": {
-    "desarrollo":"parcel fuente/index.html --dist-dir desarrollo",
-    "produccion":"parcel build fuente/index.html --public-url './' --dist-dir produccion",
+    "desarrollo": "parcel fuente/index.html --dist-dir desarrollo",
+    "produccion": "parcel build fuente/index.html --public-url './' --dist-dir produccion",
     "limpieza": "rimraf desarrollo produccion .parcel-cache",
     "des": "npm-run-all limpieza desarrollo",
     "prod": "npm-run-all limpieza produccion"
@@ -14,9 +14,25 @@
   "license": "ISC",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.11.0",
+    "assert": "^2.1.0",
+    "browserify-zlib": "^0.2.0",
+    "crypto-browserify": "^3.12.0",
+    "events": "^3.3.0",
+    "https-browserify": "^1.0.0",
     "npm-run-all": "^4.1.5",
+    "os-browserify": "^0.3.0",
     "parcel": "^2.11.0",
     "parcel-plugin-imagemin": "^4.0.2",
-    "rimraf": "^5.0.5"
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "rimraf": "^5.0.5",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "string_decoder": "^1.3.0",
+    "url": "^0.11.3",
+    "util": "^0.12.5"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.10"
   }
 }

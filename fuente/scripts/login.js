@@ -1,3 +1,6 @@
+//variables
+module.exports = sendEmail;
+
 //funciones
 async function obtenerUsuariosDefault() {
     try {
