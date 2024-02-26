@@ -1,5 +1,5 @@
 let productos = JSON.parse(localStorage.getItem('productos'));
-
+let usuarioLogeado = JSON.parse(localStorage.getItem('usuarioLogeado'));
 function getProductosPorCategoria(categoria) {
     return productos.filter(producto => producto.category === categoria);
 }

@@ -2,6 +2,7 @@
 let electronica = getElectronica();
 let visionActual = 'table';
 
+
 //funciones
 
 function updateView() {

@@ -89,5 +89,16 @@ function removeProduct(productId) {
     renderCart();
 }
 
+document.getElementById('logoutButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    if (usuarioLogeado) {
+        localStorage.setItem(usuarioLogeado.username + '_carrito', JSON.stringify(usuarioLogeado.carrito));
+        localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
+    }
+    localStorage.removeItem('usuarioLogeado');
+    actualizarHeader();
+    window.location.href = "../fuente/html/login.html";
+});
+
 renderCart();
 actualizarHeader();
