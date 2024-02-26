@@ -1,68 +1,18 @@
 //variables
-let apiURL = 'https://fakestoreapi.com/products';
-let productos = [];
-let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
-//cantiudad de likes y dislikes que se guardan en el local storage de cada producto
-
-let page = 1;
-let productosCargados = false;
+let ropaMujer = getRopaMujer();
 let visionActual = 'table';
-let carrito = [];
-let usuarioLogeado = JSON.parse(localStorage.getItem("usuarioLogeado"));
-//condicionales de usuario logeado para carrito y favoritos
-//aquí se verifica si el usuario logeado tiene carrito y favoritos, si no los tiene se crean
-if (usuarioLogeado) {
-    if (!usuarioLogeado.carrito) {
-        usuarioLogeado.carrito = [];
-    }
-    if (!usuarioLogeado.favoritos) {
-        usuarioLogeado.favoritos = [];
-    } else {
-        favoritos = usuarioLogeado.favoritos;
-    }
-} else {
-    usuarioLogeado = {
-        carrito: [],
-        favoritos: []
-    };
-    favoritos = [];
-}
-
 
 //funciones
 
-function fetchProducts(page) {
-    fetch(`${apiURL}?page=${page}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            productos = productos.concat(data);
-            productos.forEach(producto => {
-                producto.likes = localStorage.getItem(`likes_${producto.id}`) || 0;
-                producto.dislikes = localStorage.getItem(`dislikes_${producto.id}`) || 0;
-                producto.isFavorite = favoritos.includes(producto.id);
-            });
-            // Almacenar los productos en localStorage después de que se hayan cargado y procesado
-            localStorage.setItem('productos', JSON.stringify(productos));
-            updateView();
-        })
-        .catch(error => console.error('Error:', error));
-}
-
 function updateView() {
     if (visionActual === 'table') {
-        document.getElementById('contenido').innerHTML = generateTable(productos);
+        document.getElementById('contenido').innerHTML = generateTable(ropaMujer);
     } else if (visionActual === 'list') {
-        document.getElementById('contenido').innerHTML = generateList(productos);
+        document.getElementById('contenido').innerHTML = generateList(ropaMujer);
     }
 }
-
-function generateList(productos) {
-    return productos.map(product => `
+function generateList(ropaMujer) {
+    return ropaMujer.map(product => `
         <li class="product-card" onclick="showProductDetails(${product.id})">
             <img src="${product.image}" alt="${product.title}";">
             ${product.title} - ${product.price}
@@ -74,7 +24,7 @@ function generateList(productos) {
     `).join('');
 }
 
-function generateTable(productos) {
+function generateTable(ropaMujer) {
     return `
         <table>
             <thead>
@@ -88,7 +38,7 @@ function generateTable(productos) {
                 </tr>
             </thead>
             <tbody>
-                ${productos.map(producto => `
+                ${ropaMujer.map(producto => `
                      <tr class="product-card" onclick="showProductDetails(${producto.id})">
                         <td><img src="${producto.image}" alt="${producto.title}";"></td>
                         <td>${producto.title}</td>
@@ -103,17 +53,8 @@ function generateTable(productos) {
         </table>
     `;
 }
-
-function sortProductsByCategory(order) {
-    if (order === 'asc') {
-        productos.sort((a, b) => a.category.localeCompare(b.category));
-    } else if (order === 'desc') {
-        productos.sort((a, b) => b.category.localeCompare(a.category));
-    }
-}
-
 function showProductDetails(productId) {
-    const producto = productos.find(product => product.id === productId);
+    const producto = ropaMujer.find(product => product.id === productId);
     if (producto) {
         const contenido = document.getElementById('contenido');
         document.getElementById("titulo").innerHTML = "Detalles del producto";
@@ -137,9 +78,8 @@ function showProductDetails(productId) {
         });
     }
 }
-
 function addToCart(productId) {
-    const producto = productos.find(product => product.id === productId);
+    const producto = ropaMujer.find(product => product.id === productId);
     if(producto) {
         if(usuarioLogeado) {
             let carrito = JSON.parse(localStorage.getItem(usuarioLogeado.username)) || [];
@@ -157,9 +97,8 @@ function addToCart(productId) {
         },1000);
     }
 }
-
 function likeProduct(productId) {
-    const producto = productos.find(product => product.id === productId);
+    const producto = ropaMujer.find(product => product.id === productId);
     if (producto) {
         // Obtén el número actual de likes del localStorage, o usa 0 si no existe
         let likes = parseInt(localStorage.getItem(`likes_${producto.id}`)) || 0;
@@ -170,9 +109,8 @@ function likeProduct(productId) {
         likeButton.innerHTML = `<i class="fa fa-thumbs-up"></i>${likes}`; // Actualiza el botón de like con el nuevo número de likes
     }
 }
-
 function dislikeProduct(productId) {
-    const producto = productos.find(product => product.id === productId);
+    const producto = ropaMujer.find(product => product.id === productId);
     if (producto) {
         // Obtén el número actual de dislikes del localStorage, o usa 0 si no existe
         let dislikes = parseInt(localStorage.getItem(`dislikes_${producto.id}`)) || 0;
@@ -183,7 +121,6 @@ function dislikeProduct(productId) {
         dislikeButton.innerHTML = `<i class="fa fa-thumbs-down"></i>${dislikes}`; // Actualiza el botón de dislike con el nuevo número de dislikes
     }
 }
-
 function toggleFavorite(productId) {
     const index = favoritos.indexOf(productId);
     if (index === -1) {
@@ -200,8 +137,8 @@ function toggleFavorite(productId) {
     }
 }
 
-
 //eventos
+
 document.getElementById('listViewBtn').addEventListener('click', function() {
     visionActual = 'list';
     updateView();
@@ -212,15 +149,6 @@ document.getElementById('tableViewBtn').addEventListener('click', function() {
     updateView();
 });
 
-document.getElementById('sortAscBtn').addEventListener('click', function() {
-    sortProductsByCategory('asc');
-    updateView();
-});
-
-document.getElementById('sortDescBtn').addEventListener('click', function() {
-    sortProductsByCategory('desc');
-    updateView();
-});
 document.getElementById('logoutButton').addEventListener('click', function(event) {
     event.preventDefault();
     if (usuarioLogeado) {
@@ -232,19 +160,26 @@ document.getElementById('logoutButton').addEventListener('click', function(event
     window.location.href = "../fuente/html/login.html";
 });
 
-window.addEventListener('scroll', function() {
-    if (contenido.classList.contains('product-page')) {
-        return;
-    }
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        // hemos llegado al final de la página
-        if (!productosCargados) {
-            page++;
-            fetchProducts(page);
-        }
-    }
+document.getElementById('listViewBtn').addEventListener('click', function() {
+    visionActual = 'list';
+    updateView();
 });
 
-// Iniciar la carga de productos
-fetchProducts(page);
+document.getElementById('tableViewBtn').addEventListener('click', function() {
+    visionActual = 'table';
+    updateView();
+});
+
+document.getElementById('logoutButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    if (usuarioLogeado) {
+        localStorage.setItem(usuarioLogeado.username + '_carrito', JSON.stringify(usuarioLogeado.carrito));
+        localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
+    }
+    localStorage.removeItem('usuarioLogeado');
+    actualizarHeader();
+    window.location.href = "../fuente/html/login.html";
+});
+
+updateView(); // Esto actualiza la vista cuando se carga la página
 actualizarHeader();
