@@ -100,25 +100,39 @@ function addToCart(productId) {
 function likeProduct(productId) {
     const producto = ropaMujer.find(product => product.id === productId);
     if (producto) {
-        // Obtén el número actual de likes del localStorage, o usa 0 si no existe
         let likes = parseInt(localStorage.getItem(`likes_${producto.id}`)) || 0;
-        likes++; // Incrementa el número de likes
-        localStorage.setItem(`likes_${producto.id}`, likes); // Almacena el nuevo número de likes en el localStorage
+        likes++;
+        localStorage.setItem(`likes_${producto.id}`, likes);
         const likeButton = document.querySelector(`#likeButton_${productId}`);
         likeButton.classList.add('liked');
-        likeButton.innerHTML = `<i class="fa fa-thumbs-up"></i>${likes}`; // Actualiza el botón de like con el nuevo número de likes
+        likeButton.innerHTML = `<i class="fa fa-thumbs-up"></i>${likes}`;
+
+        // Actualizar el producto en el localStorage de productos
+        let productos = JSON.parse(localStorage.getItem('productos')) || [];
+        const productoIndex = productos.findIndex(product => product.id === productId);
+        if (productoIndex !== -1) {
+            productos[productoIndex].likes = likes;
+            localStorage.setItem('productos', JSON.stringify(productos));
+        }
     }
 }
 function dislikeProduct(productId) {
     const producto = ropaMujer.find(product => product.id === productId);
     if (producto) {
-        // Obtén el número actual de dislikes del localStorage, o usa 0 si no existe
         let dislikes = parseInt(localStorage.getItem(`dislikes_${producto.id}`)) || 0;
-        dislikes++; // Incrementa el número de dislikes
-        localStorage.setItem(`dislikes_${producto.id}`, dislikes); // Almacena el nuevo número de dislikes en el localStorage
+        dislikes++;
+        localStorage.setItem(`dislikes_${producto.id}`, dislikes);
         const dislikeButton = document.querySelector(`#dislikeButton_${productId}`);
         dislikeButton.classList.add('disliked');
-        dislikeButton.innerHTML = `<i class="fa fa-thumbs-down"></i>${dislikes}`; // Actualiza el botón de dislike con el nuevo número de dislikes
+        dislikeButton.innerHTML = `<i class="fa fa-thumbs-down"></i>${dislikes}`;
+
+        // Actualizar el producto en el localStorage de productos
+        let productos = JSON.parse(localStorage.getItem('productos')) || [];
+        const productoIndex = productos.findIndex(product => product.id === productId);
+        if (productoIndex !== -1) {
+            productos[productoIndex].dislikes = dislikes;
+            localStorage.setItem('productos', JSON.stringify(productos));
+        }
     }
 }
 function toggleFavorite(productId) {
