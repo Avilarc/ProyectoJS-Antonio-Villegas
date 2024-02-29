@@ -1,6 +1,3 @@
-//variables
-module.exports = sendEmail;
-
 //funciones
 async function obtenerUsuariosDefault() {
     try {
@@ -55,76 +52,78 @@ async function iniciarSesion(username, password) {
         console.error('Error iniciando sesión:', error);
     }
 }
-//variables
-
-let Registro = document.getElementById("Register");
-let login = document.getElementById("login");
-let titulo = document.getElementById("titulo");
-
-
-
 //eventos
+document.addEventListener("DOMContentLoaded", function() {
+    let Registro = document.getElementById("Register");
+    let login = document.getElementById("login");
+    let titulo = document.getElementById("titulo");
 
-document.getElementById("openReg").addEventListener("click", (evento) => {
-    evento.preventDefault();
-    Registro.style.display = "flex";
-    titulo.textContent = "Registro";
-    login.style.display = "none";
-});
-
-document.getElementById("goBack").addEventListener("click", (evento) => {
-    evento.preventDefault();
-    Registro.style.display = "none";
-    titulo.textContent = "Login";
-    login.style.display = "flex";
-});
-
-document.getElementById("login").addEventListener("submit", async (evento) => {
-    try {
+    document.getElementById("openReg").addEventListener("click", (evento) => {
         evento.preventDefault();
-        let username = document.getElementById("username");
-        let password = document.getElementById("password");
-        if(validarCampo(username) && validarCampo(password)) {
-            let usuario  = await iniciarSesion(username.value, password.value);
-            if(usuario) {
-                localStorage.setItem('usuarioLogeado', JSON.stringify(usuario));
-                actualizarHeader();
-                window.location.href = "../index.html";
-            } else {
-                alert("Usuario o contraseña incorrectos");
+        Registro.style.display = "flex";
+        titulo.textContent = "Registro";
+        login.style.display = "none";
+    });
+
+    document.getElementById("goBack").addEventListener("click", (evento) => {
+        evento.preventDefault();
+        Registro.style.display = "none";
+        titulo.textContent = "Login";
+        login.style.display = "flex";
+    });
+
+    document.getElementById("login").addEventListener("submit", async (evento) => {
+        try {
+            evento.preventDefault();
+            let username = document.getElementById("username");
+            let password = document.getElementById("password");
+            if(validarCampo(username) && validarCampo(password)) {
+                let usuario  = await iniciarSesion(username.value, password.value);
+                if(usuario) {
+                    localStorage.setItem('usuarioLogeado', JSON.stringify(usuario));
+                    actualizarHeader();
+                    window.location.href = "../index.html";
+                } else {
+                    alert("Usuario o contraseña incorrectos");
+
+                }
+            }
+        } catch (error) {
+            console.error('Error en el evento de submit del login:', error);
+        }
+    });
+
+    document.getElementById("Register").addEventListener("submit", (evento) => {
+        try {
+            evento.preventDefault();
+            let regUsername = document.getElementById("regUsername");
+            let regPassword = document.getElementById("regPassword");
+            let nombre = document.getElementById("nombre");
+            let apellidos = document.getElementById("apellidos");
+            let telefono = document.getElementById("telefono");
+            let DNI = document.getElementById("DNI");
+            let edad = document.getElementById("edad");
+            let email = document.getElementById("email"); // nuevo campo de correo electrónico
+            if (validarCampo(regUsername) && validarCampo(regPassword) && validarCampo(nombre) && validarCampo(apellidos) && validarCampo(telefono) && validarCampo(DNI) && validarCampo(edad) && validarCampo(email)) { // validación del nuevo campo de correo electrónico
+                let usuario = {
+                    username: regUsername.value,
+                    password: regPassword.value,
+                    nombre: nombre.value,
+                    apellidos: apellidos.value,
+                    telefono: telefono.value,
+                    DNI: DNI.value,
+                    edad: edad.value,
+                    email: email.value
+                };
+                almacenarUsuario(usuario);
+                window.location.href = "../html/login.html";
+                alert("Usuario registrado correctamente");
 
             }
+        } catch (error) {
+            console.error('Error en el evento de submit del registro:', error);
         }
-    } catch (error) {
-        console.error('Error en el evento de submit del login:', error);
-    }
-});
+    });
 
-document.getElementById("Register").addEventListener("submit", (evento) => {
-    try {
-        evento.preventDefault();
-        let regUsername = document.getElementById("regUsername");
-        let regPassword = document.getElementById("regPassword");
-        let nombre = document.getElementById("nombre");
-        let apellidos = document.getElementById("apellidos");
-        let telefono = document.getElementById("telefono");
-        let DNI = document.getElementById("DNI");
-        let edad = document.getElementById("edad");
-        if (validarCampo(regUsername) && validarCampo(regPassword) && validarCampo(nombre) && validarCampo(apellidos) && validarCampo(telefono) && validarCampo(DNI) && validarCampo(edad)) {
-            let usuario = {
-                username: regUsername.value,
-                password: regPassword.value,
-                nombre: nombre.value,
-                apellidos: apellidos.value,
-                telefono: telefono.value,
-                DNI: DNI.value,
-                edad: edad.value
-            };
-            almacenarUsuario(usuario);
-            alert("Usuario registrado correctamente");
-        }
-    } catch (error) {
-        console.error('Error en el evento de submit del registro:', error);
-    }
+    actualizarHeader();
 });
-

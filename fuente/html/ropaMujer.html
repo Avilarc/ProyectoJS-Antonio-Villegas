@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ropa de Mujer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="../estilos/home.css" type="text/css">
+  <link rel="stylesheet" href="../estilos/header.css" type="text/css">
+  <script src="../scripts/ui.js" defer></script>
+  <script src="../scripts/categorias.js" defer></script>
+  <script src="../scripts/ropaMujer.js" defer></script>
+</head>
+<body>
+<header>
+  <nav>
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../html/joyeria.html">Joyeria</a></li>
+      <li><a href="../html/Electronica.html">Electronica</a></li>
+      <li><a href="../html/ropaMujer.html">Ropa de Mujer</a></li>
+      <li><a href="../html/ropaHombre.html">Ropa de Hombre</a> </li>
+      <li><a href="../html/contactanos.html">Contactanos</a></li>
+      <li id="loginDefault">
+        <a href="../html/login.html">Login/Registro</a>
+      </li>
+      <li id="loginUser" style="display: none;">
+        <a id="nombreUsuario"></a>
+        <a href="../html/favoritos.html">Favoritos</a>
+        <a id="logoutButton">Logout</a>
+
+      </li>
+      <li><a href="../html/carrito.html"><i class="fas fa-shopping-cart"></i></a></li>
+    </ul>
+  </nav>
+</header>
+  <main>
+    <h1 id="titulo">Todos los productos</h1>
+    <div id="flexContainer">
+      <div id="buttonContainer">
+        <p>Vistas</p>
+        <button id="listViewBtn"><i class="fas fa-list"></i></button>
+        <button id="tableViewBtn"><i class="fas fa-table"></i></button>
+      </div>
+      <section id="contenido">
+
+      </section>
+    </div>
+  </main>
+</body>
+</html>

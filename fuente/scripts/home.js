@@ -1,6 +1,7 @@
 //variables
 let apiURL = 'https://fakestoreapi.com/products';
 let productos = [];
+let productosGlobal = [];
 let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
 //cantiudad de likes y dislikes que se guardan en el local storage de cada producto
 
@@ -42,17 +43,18 @@ function fetchProducts(page) {
         .then(data => {
             if (data.length === 0) {
                 productosCargados = true;
-            } else {
-                productos = productos.concat(data);
-                productos.forEach(producto => {
-                    producto.likes = localStorage.getItem(`likes_${producto.id}`) || 0;
-                    producto.dislikes = localStorage.getItem(`dislikes_${producto.id}`) || 0;
-                    producto.isFavorite = favoritos.includes(producto.id);
-                });
-                // Almacenar los productos en localStorage después de que se hayan cargado y procesado
-                localStorage.setItem('productos', JSON.stringify(productos));
-                updateView();
+                return;
             }
+            // Filtrar los productos que ya están en el array de productos
+            const newProducts = data.filter(product => !productos.some(p => p.id === product.id));
+            productos = productos.concat(newProducts);
+            productos.forEach(producto => {
+                producto.likes = localStorage.getItem(`likes_${producto.id}`) || 0;
+                producto.dislikes = localStorage.getItem(`dislikes_${producto.id}`) || 0;
+                producto.isFavorite = favoritos.includes(producto.id);
+            });
+            localStorage.setItem('productos', JSON.stringify(productos));
+            updateView();
         })
         .catch(error => console.error('Error:', error));
 }
@@ -179,6 +181,7 @@ function likeProduct(productId) {
             productosLocalStorage[productoIndex].likes = likes;
             localStorage.setItem('productos', JSON.stringify(productosLocalStorage));
         }
+
     }
 }
 
@@ -199,27 +202,31 @@ function dislikeProduct(productId) {
             productosLocalStorage[productoIndex].dislikes = dislikes;
             localStorage.setItem('productos', JSON.stringify(productosLocalStorage));
         }
+
     }
 }
 
 function toggleFavorite(productId) {
-    const index = favoritos.indexOf(productId);
-    if (index === -1) {
-        favoritos.push(productId);
-        document.querySelector(`#favoriteButton_${productId} i`).classList.add('favorited');
-    } else {
-        favoritos.splice(index, 1);
-        document.querySelector(`#favoriteButton_${productId} i`).classList.remove('favorited');
-    }
-    usuarioLogeado.favoritos = favoritos;
-    localStorage.setItem('usuarioLogeado', JSON.stringify(usuarioLogeado));
-    if (usuarioLogeado) {
-        localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
+    const producto = productos.find(product => product.id === productId);
+    if (producto) {
+        const index = usuarioLogeado.favoritos.findIndex(fav => fav.id === productId);
+        if (index === -1) {
+            usuarioLogeado.favoritos.push(producto);
+            document.querySelector(`#favoriteButton_${productId} i`).classList.add('favorited');
+        } else {
+            usuarioLogeado.favoritos.splice(index, 1);
+            document.querySelector(`#favoriteButton_${productId} i`).classList.remove('favorited');
+        }
+        localStorage.setItem('usuarioLogeado', JSON.stringify(usuarioLogeado));
+        if (usuarioLogeado) {
+            localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
+        }
     }
 }
 
 
 //eventos
+
 document.getElementById('listViewBtn').addEventListener('click', function() {
     visionActual = 'list';
     updateView();
@@ -254,12 +261,10 @@ window.addEventListener('scroll', function() {
     if (contenido.classList.contains('product-page')) {
         return;
     }
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    if (!productosCargados && window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         // hemos llegado al final de la página
-        if (!productosCargados) { // Solo hacer fetch si aún hay productos para cargar
-            page++;
-            fetchProducts(page);
-        }
+        page++;
+        fetchProducts(page);
     }
 });
 

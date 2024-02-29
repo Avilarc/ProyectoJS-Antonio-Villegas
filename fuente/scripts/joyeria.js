@@ -5,6 +5,9 @@ let visionActual = 'table';
 //funciones
 
 function updateView() {
+    // Limpiar el contenido antes de actualizar la vista
+    document.getElementById('contenido').innerHTML = '';
+
     if (visionActual === 'table') {
         document.getElementById('contenido').innerHTML = generateTable(joyeria);
     } else if (visionActual === 'list') {
@@ -111,7 +114,7 @@ function likeProduct(productId) {
         let productos = JSON.parse(localStorage.getItem('productos')) || [];
         const productoIndex = productos.findIndex(product => product.id === productId);
         if (productoIndex !== -1) {
-            productos[productoIndex].likes = likes;
+            productos[productoIndex] = producto; // Aquí es donde se reemplaza el producto existente con el producto actualizado
             localStorage.setItem('productos', JSON.stringify(productos));
         }
     }
@@ -130,49 +133,32 @@ function dislikeProduct(productId) {
         let productos = JSON.parse(localStorage.getItem('productos')) || [];
         const productoIndex = productos.findIndex(product => product.id === productId);
         if (productoIndex !== -1) {
-            productos[productoIndex].dislikes = dislikes;
+            productos[productoIndex] = producto; // Aquí es donde se reemplaza el producto existente con el producto actualizado
             localStorage.setItem('productos', JSON.stringify(productos));
         }
     }
 }
 function toggleFavorite(productId) {
-    const index = favoritos.indexOf(productId);
-    if (index === -1) {
-        favoritos.push(productId);
-        document.querySelector(`#favoriteButton_${productId} i`).classList.add('favorited');
-    } else {
-        favoritos.splice(index, 1);
-        document.querySelector(`#favoriteButton_${productId} i`).classList.remove('favorited');
-    }
-    usuarioLogeado.favoritos = favoritos;
-    localStorage.setItem('usuarioLogeado', JSON.stringify(usuarioLogeado));
-    if (usuarioLogeado) {
-        localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
+    const producto = productos.find(product => product.id === productId);
+    if (producto) {
+        const index = usuarioLogeado.favoritos.findIndex(fav => fav.id === productId);
+        if (index === -1) {
+            usuarioLogeado.favoritos.push(producto);
+            document.querySelector(`#favoriteButton_${productId} i`).classList.add('favorited');
+        } else {
+            usuarioLogeado.favoritos.splice(index, 1);
+            document.querySelector(`#favoriteButton_${productId} i`).classList.remove('favorited');
+        }
+        localStorage.setItem('usuarioLogeado', JSON.stringify(usuarioLogeado));
+        if (usuarioLogeado) {
+            localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
+        }
     }
 }
 
 //eventos
 
-document.getElementById('listViewBtn').addEventListener('click', function() {
-    visionActual = 'list';
-    updateView();
-});
 
-document.getElementById('tableViewBtn').addEventListener('click', function() {
-    visionActual = 'table';
-    updateView();
-});
-
-document.getElementById('logoutButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    if (usuarioLogeado) {
-        localStorage.setItem(usuarioLogeado.username + '_carrito', JSON.stringify(usuarioLogeado.carrito));
-        localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
-    }
-    localStorage.removeItem('usuarioLogeado');
-    actualizarHeader();
-    window.location.href = "../fuente/html/login.html";
-});
 
 document.getElementById('listViewBtn').addEventListener('click', function() {
     visionActual = 'list';
@@ -192,7 +178,7 @@ document.getElementById('logoutButton').addEventListener('click', function(event
     }
     localStorage.removeItem('usuarioLogeado');
     actualizarHeader();
-    window.location.href = "../fuente/html/login.html";
+    window.location.href = "../html/login.html";
 });
 
 updateView(); // Esto actualiza la vista cuando se carga la página

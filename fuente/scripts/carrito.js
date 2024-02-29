@@ -2,8 +2,8 @@ let carrito;
 let usuarioLogeado = JSON.parse(localStorage.getItem('usuarioLogeado'));
 let productos = JSON.parse(localStorage.getItem('productos'));
 let contenedorCarrito = document.getElementById('contenedorCarrito');
-function renderCart() {
 
+function renderCart() {
     if (!usuarioLogeado) {
         contenedorCarrito.innerHTML = '<p>El carrito está vacío.</p>';
         return;
@@ -22,6 +22,7 @@ function renderCart() {
         </tr>
     `;
 
+    let total = 0;
     if (carrito && carrito.length > 0) {
         carrito = carrito.filter(producto => producto !== null);
 
@@ -48,13 +49,36 @@ function renderCart() {
                 </td>
             `;
             tabla.appendChild(fila);
+            total += producto.price * productCounts[producto.id];
         });
     } else {
         contenedorCarrito.innerHTML = '<p>El carrito está vacío.</p>';
         return;
     }
 
+    let totalDiv = document.createElement('div');
+    totalDiv.innerHTML = `
+        <p>Total: $${total}</p>
+        <button id="orderButton">Realizar pedido</button>
+    `;
     contenedorCarrito.appendChild(tabla);
+    contenedorCarrito.appendChild(totalDiv);
+
+    document.getElementById('orderButton').addEventListener('click', function() {
+        let mensaje = document.createElement('h1');
+        mensaje.textContent = '¡Gracias por tu compra!';
+        contenedorCarrito.innerHTML = '';
+        contenedorCarrito.appendChild(mensaje);
+
+        setTimeout(() => {
+            if(usuarioLogeado) {
+                localStorage.removeItem(usuarioLogeado.username);
+                window.location.href = "../index.html";
+            }
+
+
+        }, 2000);
+    });
 }
 
 function incrementProduct(productId) {

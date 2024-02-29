@@ -10,9 +10,10 @@ document.getElementById('contactForm').addEventListener('submit', function(event
 
 });
 
+
 function initMap() {
-    let storeLocation = {lat: 19.4326, lng: -99.1332};
-    let map = new google.maps.Map(document.getElementById('map'), {zoom: 4,center: storeLocation});
+    let storeLocation = {lat: 37.19375017507241, lng: -3.61451089831693}; //37.19375017507241, -3.61451089831693
+    let map = new google.maps.Map(document.getElementById('map'), {zoom: 15,center: storeLocation});
     let marker = new google.maps.Marker({position: storeLocation,map: map})
 
 }
@@ -22,4 +23,19 @@ window.onload = () => {
     script.src = 'https://maps.googleapis.com/maps/api/js?key=' + API_KEY + '&callback=initMap';
     script.async = true;
     document.body.appendChild(script);
+
+    actualizarHeader();
+
+    document.getElementById('logoutButton').addEventListener('click', function(event) {
+        event.preventDefault();
+        if (usuarioLogeado) {
+            localStorage.setItem(usuarioLogeado.username + '_carrito', JSON.stringify(usuarioLogeado.carrito));
+            localStorage.setItem(usuarioLogeado.username + '_favoritos', JSON.stringify(usuarioLogeado.favoritos));
+        }
+        localStorage.removeItem('usuarioLogeado');
+        actualizarHeader();
+        window.location.href = "../html/login.html";
+    });
+
 }
+
