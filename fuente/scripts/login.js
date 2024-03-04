@@ -26,9 +26,16 @@ function validarCampo(campo) {
 
 function almacenarUsuario(usuario) {
     try {
+        // Initialize the user's cart
         usuario.carrito = [];
+
+        // Get the current list of users from localStorage
         let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+        // Add the new user to the list
         usuarios.push(usuario);
+
+        // Save the updated list back to localStorage
         localStorage.setItem("usuarios", JSON.stringify(usuarios));
     } catch (error) {
         console.error('Error almacenando usuario:', error);
